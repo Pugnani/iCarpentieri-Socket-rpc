@@ -1,6 +1,6 @@
 import java.net.*;
 import java.io.*;
-
+import  java.util.*;
 
 public class TCPClient { 
 
@@ -11,11 +11,18 @@ public class TCPClient {
 	try{ 
 	    int serverPort = 7896;
 	    s = new Socket(args[1], serverPort);
-	    DataInputStream in = new DataInputStream( s.getInputStream());
-	    DataOutputStream out = new DataOutputStream( s.getOutputStream());
-	    out.writeUTF(args[0]); // UTF is a string encoding 
-	    String data = in.readUTF(); 
-	    System.out.println("Received: "+ data); 
+        String data= "a";
+        DataInputStream in = new DataInputStream( s.getInputStream());
+        DataOutputStream out = new DataOutputStream( s.getOutputStream());
+        Scanner keyboard = new Scanner(System.in);
+        String message = "";
+        do {
+            System.out.print("Inserisci messaggio (/quit per uscire): ");
+            message = keyboard.nextLine();
+            out.writeUTF(message);
+            data = in.readUTF();
+            System.out.println("Ricevuto: " + data);
+        } while(!(message.equals("/quit")));
 	} catch (UnknownHostException e){ 
 	    System.out.println("Sock: "+e.getMessage());
 	} catch (EOFException e){System.out.println("EOF: "+e.getMessage()); 

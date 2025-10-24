@@ -25,16 +25,20 @@ class Connection extends Thread {
 	    out = new DataOutputStream( clientSocket.getOutputStream()); 
 	    this.start();
 	} catch(IOException e) {System.out.println("Connection: "+e.getMessage());}
-    } 
+    }
 
     public void run(){
-	try { // an echo server 
-	    String data = in.readUTF(); 
-	    out.writeUTF(data);
+	try { // an echo server
+        String data;
+        do{
+            data = in.readUTF();
+            out.writeUTF(data);
+        }while(!(data.equals("/quit")));
 	} catch(EOFException e) {System.out.println("EOF: "+e.getMessage()); 
 	} catch(IOException e) {System.out.println("IO:s a"+e.getMessage());
-	} finally {
-	    try {clientSocket.close();
-	    } catch (IOException e) {/*close failed*/}}
+	}
+    finally {
+        try {clientSocket.close();
+        } catch (IOException e) {/*close failed*/}}
     }
 }
